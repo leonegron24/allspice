@@ -11,4 +11,9 @@ public class IngredientsController : ControllerBase
         _ingredientsService = ingredientsService;
         _auth0Provider = auth0Provider;
     }
+
+    public string Test()
+    {
+        return "ingredients are ready";
+    }
 }
