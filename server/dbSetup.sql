@@ -38,6 +38,30 @@ CREATE TABLE recipes (
     Foreign Key (creator_id) REFERENCES accounts (id) ON DELETE CASCADE
 )
 
+-- CREATE RECIPE
+INSERT INTO
+    recipes (
+        title,
+        instructions,
+        img,
+        category,
+        creator_id
+    )
+values (
+        'Salsa',
+        'mix the veges together',
+        'https://images.unsplash.com/photo-1713374989663-e5b165462fef?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2Fsc2F8ZW58MHx8MHx8fDA%3D',
+        'snack',
+        '685df65b38949a162240dacd'
+    );
+
+-- SELECT RECIPES
+SELECT recipes.*, accounts.*
+FROM recipes
+    INNER JOIN accounts ON accounts.id = recipes.creator_id
+WHERE
+    recipes.id = LAST_INSERT_ID();
+
 -- Favorite
 CREATE TABLE favorites (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
