@@ -2,9 +2,9 @@ namespace allspice.Services;
 
 public class IngredientsService
 {
-    private readonly IngredientsRepository _repository;
-    public IngredientsService(IngredientsRepository repository)
+    private readonly IngredientsRepository _ingredientsRepository;
+    public IngredientsService(IngredientsRepository ingredientsRepository)
     {
-        _repository = repository;
+        _ingredientsRepository = ingredientsRepository;
     }
 }
