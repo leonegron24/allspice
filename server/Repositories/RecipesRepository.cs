@@ -1,5 +1,6 @@
 
 
+
 namespace allspice.Repositories;
 
 public class RecipesRepository
@@ -48,5 +49,24 @@ public class RecipesRepository
         }).ToList();
 
         return recipes;
+    }
+
+    internal Recipe GetRecipeById(int recipeId)
+    {
+        string sql = @"
+        SELECT recipes.*, accounts.*
+        FROM recipes
+        INNER JOIN accounts ON accounts.id = recipes.creator_id
+        WHERE
+        recipes.id = @RecipeId;
+        ";
+
+        Recipe queriedRecipe = _db.Query(sql, (Recipe recipe, Account account) =>
+        {
+            recipe.Creator = account;
+            return recipe;
+        }, new { RecipeId = recipeId }).SingleOrDefault();
+
+        return queriedRecipe;
     }
 }
