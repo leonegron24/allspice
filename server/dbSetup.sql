@@ -56,11 +56,16 @@ values (
     );
 
 -- SELECT RECIPES
+SELECT * FROM recipes
+
 SELECT recipes.*, accounts.*
 FROM recipes
     INNER JOIN accounts ON accounts.id = recipes.creator_id
 WHERE
     recipes.id = LAST_INSERT_ID();
+
+-- UPDATE RECIPE
+UPDATE recipes SET recipe = WHERE recipes.id = 5
 
 -- Favorite
 CREATE TABLE favorites (

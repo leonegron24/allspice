@@ -1,6 +1,7 @@
 
 
 
+
 namespace allspice.Repositories;
 
 public class RecipesRepository
@@ -68,5 +69,25 @@ public class RecipesRepository
         }, new { RecipeId = recipeId }).SingleOrDefault();
 
         return queriedRecipe;
+    }
+
+    internal void UpdateRecipe(Recipe recipe)
+    {
+        string sql = @"
+        UPDATE recipes 
+        SET 
+        title = @Title,
+        instructions = @Instructions,
+        img = @Img,
+        category = @Category
+        WHERE id = @Id LIMIT 1
+        ;";
+
+        int rowsAffected = _db.Execute(sql, recipe);
+
+        if (rowsAffected != 1)
+        {
+            throw new Exception(rowsAffected + " rows were affected and thats not good");
+        }
     }
 }
