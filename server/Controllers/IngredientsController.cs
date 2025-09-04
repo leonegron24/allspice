@@ -12,8 +12,18 @@ public class IngredientsController : ControllerBase
         _auth0Provider = auth0Provider;
     }
 
-    public string Test()
+    [Authorize]
+    [HttpPost]
+    public ActionResult<Ingredient> CreateIngredient([FromBody] Ingredient ingredientData)
     {
-        return "ingredients are ready";
+        try
+        {
+            Ingredient ingredient = _ingredientsService.CreateIngredient(ingredientData);
+            return Ok(ingredient);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }

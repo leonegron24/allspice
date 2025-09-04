@@ -14,10 +14,25 @@ CREATE TABLE ingredients (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     quantity VARCHAR(255) NOT NULL,
-    recipe_id VARCHAR(255) NOT NULL
+    recipe_id INT NOT NULL,
+    FOREIGN KEY (recipe_id) REFERENCES recipes (id) ON DELETE CASCADE
 )
 
+DROP TABLE IF EXISTS ingredients;
+
+-- SELECT INGREDIENTS
 SELECT * FROM ingredients
+
+SELECT ingredients.*, recipes.*
+FROM ingredients
+    INNER JOIN recipes ON recipes.id = ingredients.recipe_id
+WHERE
+    ingredients.id = 1;
+
+-- Create Ingredients
+INSERT INTO
+    ingredients (name, quantity, recipe_id)
+values ('Onion', 2, 6);
 
 -- Recipe
 CREATE TABLE recipes (
