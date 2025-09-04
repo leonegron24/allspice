@@ -67,6 +67,9 @@ WHERE
 -- UPDATE RECIPE
 UPDATE recipes SET recipe = WHERE recipes.id = 5
 
+-- DELETE RECIPE
+DELETE FROM recipes WHERE id = 5 LIMIT 1;
+
 -- Favorite
 CREATE TABLE favorites (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,

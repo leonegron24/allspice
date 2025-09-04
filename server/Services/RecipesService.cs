@@ -15,6 +15,16 @@ public class RecipesService
         return recipe;
     }
 
+    internal void DeleteRecipe(int recipeId, Account userInfo)
+    {
+        Recipe recipe = GetRecipeById(recipeId);
+        if (userInfo.Id != recipe.CreatorId)
+        {
+            throw new Exception($"You can not update this recipe, {userInfo.Name}");
+        }
+        _recipesRepository.DeleteRecipe(recipeId);
+    }
+
     internal List<Recipe> GetAllRecipes()
     {
         List<Recipe> recipes = _recipesRepository.GetAllRecipes();
