@@ -20,8 +20,20 @@ CREATE TABLE ingredients (
 
 DROP TABLE IF EXISTS favorites;
 
+INSERT INTO
+    favorites (recipe_id, account_id)
+values (@RecipeId, @AccountId);
+
+SELECT favorites.*, recipes.*
+FROM
+    favorites
+    INNER JOIN recipes ON recipes.id = favorites.recipe_id
+    INNER JOIN acounts ON favorites.acount_id = accounts.id
+WHERE
+    favorites.id = LAST_INSERT_ID();
+
 -- SELECT INGREDIENTS
-SELECT * FROM ingredients
+SELECT * FROM favorites
 
 SELECT ingredients.*, recipes.*
 FROM ingredients

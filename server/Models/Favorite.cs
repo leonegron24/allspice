@@ -7,4 +7,5 @@ public class Favorite
     public DateTime UpdatedAt { get; set; }
     public int RecipeId { get; set; }
     public string AccountId { get; set; }
+    public Recipe Recipe { get; set; }
 }
