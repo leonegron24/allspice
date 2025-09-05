@@ -18,7 +18,7 @@ CREATE TABLE ingredients (
     FOREIGN KEY (recipe_id) REFERENCES recipes (id) ON DELETE CASCADE
 )
 
-DROP TABLE IF EXISTS ingredients;
+DROP TABLE IF EXISTS favorites;
 
 -- SELECT INGREDIENTS
 SELECT * FROM ingredients
@@ -33,6 +33,16 @@ WHERE
 INSERT INTO
     ingredients (name, quantity, recipe_id)
 values ('Onion', 2, 6);
+
+-- Get Ingredients for Recipe
+Select ingredients.*, recipes.*
+From ingredients
+    INNER JOIN recipes ON recipes.id = ingredients.recipe_id
+WHERE
+    recipes.id = 1
+
+-- Get Ingredient By Id
+Select * FROM ingredients WHERE ingredients.id = 2;
 
 -- Recipe
 CREATE TABLE recipes (
@@ -91,5 +101,6 @@ CREATE TABLE favorites (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     recipe_id INT NOT NULL,
-    account_id VARCHAR(255) NOT NULL
+    account_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 )
