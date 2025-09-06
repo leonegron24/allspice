@@ -1,4 +1,5 @@
 
+
 namespace allspice.Services;
 
 public class FavoritesService
@@ -19,4 +20,11 @@ public class FavoritesService
         Recipe favorite = _favoritesRepository.CreateFavorite(recipeId, favoriteData);
         return favorite;
     }
+
+    internal List<Favorite> GetAccountFavorites(Account userInfo)
+    {
+        List<Favorite> favorites = _favoritesRepository.GetAccountFavorites(userInfo);
+        return favorites;
+    }
+
 }

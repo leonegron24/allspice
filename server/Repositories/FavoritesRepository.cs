@@ -38,4 +38,21 @@ public class FavoritesRepository
         return recipe;
     }
 
+    internal List<Favorite> GetAccountFavorites(Account userInfo)
+    {
+        string sql = @"
+        SELECT favorites.*, recipes.*
+        FROM favorites
+        INNER JOIN recipes ON favorites.recipe_id = recipes.id
+        WHERE
+        favorites.account_id = @Id;";
+
+        List<Favorite> favorites = _db.Query(sql, (Favorite favorite, Recipe recipe) =>
+        {
+            favorite.Recipe = recipe;
+            return favorite;
+        }, new { Id = userInfo.Id }).ToList();
+
+        return favorites;
+    }
 }

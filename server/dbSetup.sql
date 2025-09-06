@@ -116,3 +116,16 @@ CREATE TABLE favorites (
     account_id VARCHAR(255) NOT NULL,
     FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 )
+
+-- Get Account Favorite Recipes
+SELECT favorites.*, recipes.*
+FROM favorites
+    RIGHT JOIN recipes ON favorites.recipe_id = recipes.id
+WHERE
+    favorites.account_id = '685df65b38949a162240dacd'
+
+SELECT favorites.*, accounts.*
+FROM favorites
+    INNER JOIN accounts ON favorites.account_id = accounts.id
+WHERE
+    accounts.id = '685df65b38949a162240dacd'
