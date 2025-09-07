@@ -38,6 +38,18 @@ public class FavoritesRepository
         return recipe;
     }
 
+    internal void DeleteFavorite(int favoriteFavoriteId)
+    {
+        string sql = "DELETE FROM favorites WHERE id = @Id LIMIT 1;";
+
+        int rowsAffected = _db.Execute(sql, new { Id = favoriteFavoriteId });
+
+        if (rowsAffected != 1)
+        {
+            throw new Exception(rowsAffected + " rows were affected and thats not good");
+        }
+    }
+
     internal List<Favorite> GetAccountFavorites(Account userInfo)
     {
         string sql = @"
@@ -54,5 +66,15 @@ public class FavoritesRepository
         }, new { Id = userInfo.Id }).ToList();
 
         return favorites;
+    }
+
+    internal Favorite GetFavoriteById(int favoriteId)
+    {
+        string sql = @"
+        SELECT * FROM favorites WHERE favorites.id = @FavoriteId;
+        ";
+
+        Favorite favorite = _db.Query<Favorite>(sql, new { FavoriteId = favoriteId }).SingleOrDefault();
+        return favorite;
     }
 }

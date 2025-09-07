@@ -129,3 +129,7 @@ FROM favorites
     INNER JOIN accounts ON favorites.account_id = accounts.id
 WHERE
     accounts.id = '685df65b38949a162240dacd'
+
+DELETE FROM favorites WHERE id = 2 LIMIT 1;
+
+SELECT * FROM favorites WHERE id = 2;

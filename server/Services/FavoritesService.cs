@@ -1,5 +1,6 @@
 
 
+
 namespace allspice.Services;
 
 public class FavoritesService
@@ -21,10 +22,26 @@ public class FavoritesService
         return favorite;
     }
 
+    internal void DeleteFavorite(int favoriteFavoriteId, Account userInfo)
+    {
+        Favorite favoriteToDelete = GetFavoriteById(favoriteFavoriteId);
+        if (favoriteToDelete.AccountId != userInfo.Id)
+        {
+            throw new Exception($"You can not delete another users favorite, {userInfo.Name}");
+        }
+        _favoritesRepository.DeleteFavorite(favoriteFavoriteId);
+    }
+
     internal List<Favorite> GetAccountFavorites(Account userInfo)
     {
         List<Favorite> favorites = _favoritesRepository.GetAccountFavorites(userInfo);
         return favorites;
+    }
+
+    private Favorite GetFavoriteById(int favoriteId)
+    {
+        Favorite favorite = _favoritesRepository.GetFavoriteById(favoriteId);
+        return favorite;
     }
 
 }
