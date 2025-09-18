@@ -14,3 +14,8 @@ public class Recipe
     public int FavoriteCount { get; set; }
 
 }
+
+public class FavoriteRecipe : Recipe
+{
+    public int FavoriteId { get; set; }
+}

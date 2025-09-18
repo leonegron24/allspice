@@ -15,13 +15,13 @@ public class FavoritesController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<Recipe>> CreateFavorite([FromBody] Favorite favoriteData)
+    public async Task<ActionResult<FavoriteRecipe>> CreateFavorite([FromBody] Favorite favoriteData)
     {
         try
         {
             Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
             favoriteData.AccountId = userInfo.Id;
-            Recipe favorite = _favoritesService.CreateFavorite(favoriteData);
+            FavoriteRecipe favorite = _favoritesService.CreateFavorite(favoriteData);
             return favorite;
         }
         catch (Exception e)
@@ -31,7 +31,7 @@ public class FavoritesController : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("{favoriteFavoriteId}")]
+    [HttpDelete("{favoriteId}")]
     public async Task<ActionResult<string>> DeleteFavorite(int favoriteId)
     {
         try

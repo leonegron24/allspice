@@ -12,27 +12,26 @@ public class FavoritesRepository
         _db = db;
     }
 
-    internal Recipe CreateFavorite(int recipeId, Favorite favoriteData)
+    internal FavoriteRecipe CreateFavorite(int recipeId, Favorite favoriteData)
     {
         string sql = @"
     INSERT INTO favorites (recipe_id, account_id)
     VALUES (@RecipeId, @AccountId);
 
-    SELECT recipes.*, accounts.*
-    FROM recipes
+    SELECT favorites.id AS FavoriteId, recipes.*, accounts.*
+    FROM favorites
+    JOIN recipes ON recipes.id = favorites.recipe_id
     JOIN accounts ON accounts.id = recipes.creator_id
     WHERE recipes.id = @RecipeId;
     ";
 
-        Recipe recipe = _db.Query<Recipe, Account, Recipe>(
+        FavoriteRecipe recipe = _db.Query(
             sql,
-            (recipe, account) =>
+            (FavoriteRecipe recipe, Account account) =>
             {
                 recipe.Creator = account;
                 return recipe;
-            },
-            new { RecipeId = recipeId, favoriteData.AccountId },
-            splitOn: "Id"
+            }, favoriteData
         ).SingleOrDefault();
 
         return recipe;
@@ -50,7 +49,7 @@ public class FavoritesRepository
         }
     }
 
-    internal List<Favorite> GetAccountFavorites(Account userInfo)
+    internal List<FavoriteRecipe> GetAccountFavorites(Account userInfo)
     {
         string sql = @"
         SELECT favorites.*, recipes.*
@@ -59,10 +58,10 @@ public class FavoritesRepository
         WHERE
         favorites.account_id = @Id;";
 
-        List<Favorite> favorites = _db.Query(sql, (Favorite favorite, Recipe recipe) =>
+        List<FavoriteRecipe> favorites = _db.Query(sql, (Favorite favorite, FavoriteRecipe fRecipe) =>
         {
-            favorite.Recipe = recipe;
-            return favorite;
+            fRecipe.FavoriteId = favorite.Id;
+            return fRecipe;
         }, new { Id = userInfo.Id }).ToList();
 
         return favorites;

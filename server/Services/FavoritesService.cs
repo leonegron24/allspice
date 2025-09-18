@@ -14,11 +14,11 @@ public class FavoritesService
         _recipesService = recipesService;
     }
 
-    internal Recipe CreateFavorite(Favorite favoriteData)
+    internal FavoriteRecipe CreateFavorite(Favorite favoriteData)
     {
         Recipe favoritedRecipe = _recipesService.GetRecipeById(favoriteData.RecipeId);
         int recipeId = favoritedRecipe.Id;
-        Recipe favorite = _favoritesRepository.CreateFavorite(recipeId, favoriteData);
+        FavoriteRecipe favorite = _favoritesRepository.CreateFavorite(recipeId, favoriteData);
         return favorite;
     }
 
@@ -32,9 +32,9 @@ public class FavoritesService
         _favoritesRepository.DeleteFavorite(favoriteFavoriteId);
     }
 
-    internal List<Favorite> GetAccountFavorites(Account userInfo)
+    internal List<FavoriteRecipe> GetAccountFavorites(Account userInfo)
     {
-        List<Favorite> favorites = _favoritesRepository.GetAccountFavorites(userInfo);
+        List<FavoriteRecipe> favorites = _favoritesRepository.GetAccountFavorites(userInfo);
         return favorites;
     }
 
