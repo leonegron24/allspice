@@ -1,9 +1,13 @@
 <script setup>
+import { AppState } from '@/AppState.js';
 import Example from '@/components/Example.vue';
+import RecipeCard from '@/components/RecipeCard.vue';
 import { recipesService } from '@/services/RecipesService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
+
+const recipes = computed(() => AppState.recipes)
 
 onMounted(() => {
   getRecipes()
@@ -40,13 +44,14 @@ async function getRecipes() {
   </section>
 
   <!-- Recipe Cards -->
-  <section class="container">
+  <section class="container-fluid">
     <div class="row">
-      <!-- <div class="col-md-4" v-for="recipe in recipes" :key="recipeKey">
-        </RecipeCard>
-      </div> -->
+      <div class="col-md-4 pb-4 d-flex justify-content-center" v-for="recipe in recipes" :key="recipe.id">
+        <RecipeCard :recipe="recipe" />
+      </div>
     </div>
   </section>
+
 </template>
 
 <style scoped lang="scss">
