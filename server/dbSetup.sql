@@ -141,12 +141,12 @@ WHERE
 
 SELECT * FROM accounts;
 
-SELECT recipes.*, accounts.*, COUNT(*) AS favoriteCount
+SELECT recipes.*, COUNT(favorites.id) AS favoriteCount, accounts.*
 FROM
-    favorites
-    RIGHT JOIN recipes ON favorites.recipe_id = recipes.id
+    recipes
     INNER JOIN accounts ON accounts.id = recipes.creator_id
-GROUP BY
-    recipes.id
+    LEFT JOIN favorites ON favorites.recipe_id = recipes.id
+WHERE
+    recipes.id = 169
 
 SELECT * FROM favorites WHERE recipe_id = 168

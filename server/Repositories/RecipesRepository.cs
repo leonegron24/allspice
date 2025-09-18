@@ -50,9 +50,11 @@ public class RecipesRepository
     internal List<Recipe> GetAllRecipes()
     {
         string sql = @"
-        SELECT recipes.*, accounts.*, COUNT(favorites.id) AS favoriteCount
-        FROM
-        recipes
+        SELECT 
+        recipes.*, 
+        COUNT(favorites.id) AS favoriteCount,
+        accounts.* 
+        FROM recipes
         INNER JOIN accounts ON accounts.id = recipes.creator_id
         LEFT JOIN favorites ON favorites.recipe_id = recipes.id
         GROUP BY
