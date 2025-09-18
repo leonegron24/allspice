@@ -133,3 +133,20 @@ WHERE
 DELETE FROM favorites WHERE id = 2 LIMIT 1;
 
 SELECT * FROM favorites WHERE id = 2;
+
+SELECT *
+FROM favorites
+WHERE
+    favorites.account_id = '685df65b38949a162240dacd';
+
+SELECT * FROM accounts;
+
+SELECT recipes.*, accounts.*, COUNT(*) AS favoriteCount
+FROM
+    favorites
+    RIGHT JOIN recipes ON favorites.recipe_id = recipes.id
+    INNER JOIN accounts ON accounts.id = recipes.creator_id
+GROUP BY
+    recipes.id
+
+SELECT * FROM favorites WHERE recipe_id = 168
