@@ -17,12 +17,12 @@ function logout() {
 
 <template>
   <span class="navbar-text">
-    <button class="btn selectable text-green" @click="login" v-if="!identity">
+    <button class="btn selectable text-white" @click="login" v-if="!identity">
       Login
     </button>
     <div v-else>
       <div class="dropdown">
-        <div role="button" class="bg-dark selectable no-select" data-bs-toggle="dropdown" aria-expanded="false"
+        <div role="button" class="rounded selectable no-select" data-bs-toggle="dropdown" aria-expanded="false"
           title="open account menu">
           <div v-if="account?.picture || identity?.picture">
             <img :src="account?.picture || identity?.picture" alt="account photo" height="40" class="user-img" />
@@ -48,8 +48,8 @@ function logout() {
 
 <style lang="scss" scoped>
 .user-img {
-  height: 40px;
-  width: 40px;
+  height: 80px;
+  width: 80px;
   border-radius: 100px;
   object-fit: cover;
   object-position: center;

@@ -17,35 +17,32 @@ watch(theme, () => {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-md bg-codeworks border-bottom border-vue">
-    <div class="container gap-2">
-      <RouterLink :to="{ name: 'Home' }" class="d-flex align-items-center text-light">
-        <img class="navbar-brand" alt="logo" src="/img/cw-logo.png" height="45" />
-        <b class="fs-5">Vue Starter</b>
-      </RouterLink>
+  <nav class="text-white text-bold border-vue">
+    <div class="container-fluid text-center">
       <!-- collapse button -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-links"
         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="mdi mdi-menu text-light"></span>
       </button>
       <!-- collapsing menu -->
-      <div class="collapse navbar-collapse " id="navbar-links">
-        <ul class="navbar-nav">
-          <li>
-            <RouterLink :to="{ name: 'About' }" class="btn text-green selectable">
-              About
-            </RouterLink>
-          </li>
-        </ul>
-        <!-- LOGIN COMPONENT HERE -->
-        <div class="ms-auto">
-          <button class="btn text-light" @click="toggleTheme"
-            :title="`Enable ${theme == 'light' ? 'dark' : 'light'} theme.`">
-            <i v-if="theme == 'dark'" class="mdi mdi-weather-sunny"></i>
-            <i v-if="theme == 'light'" class="mdi mdi-weather-night"></i>
-          </button>
+      <div class="d-flex">
+        <div class="collapse navbar-collapse text-end w-25 " id="navbar-links">
+          <form class="d-flex w-25" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          <div class="d-flex">
+            <div class="ms-auto">
+              <button class="btn text-light fs-2" @click="toggleTheme"
+                :title="`Enable ${theme == 'light' ? 'dark' : 'light'} theme.`">
+                <i v-if="theme == 'dark'" class="mdi mdi-weather-sunny"></i>
+                <i v-if="theme == 'light'" class="mdi mdi-weather-night"></i>
+              </button>
+            </div>
+            <Login />
+          </div>
+          <!-- LOGIN COMPONENT HERE -->
         </div>
-        <Login />
       </div>
     </div>
   </nav>

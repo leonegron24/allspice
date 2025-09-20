@@ -1,6 +1,6 @@
 <script setup>
 import { AppState } from '@/AppState.js';
-import Example from '@/components/Example.vue';
+import Navbar from '@/components/Navbar.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
 import { recipesService } from '@/services/RecipesService.js';
 import { logger } from '@/utils/Logger.js';
@@ -28,11 +28,17 @@ async function getRecipes() {
 <template>
   <!-- Header -->
   <section class="bg-cooking m-4 rounded position-relative shadow">
-    <div class="text-center p-4 text-white">
-      <h1>All-Spice</h1>
-      <h4>Cherish Your Family</h4>
-      <h4>And Theri Cooking</h4>
-    </div>
+    <header>
+      <Navbar />
+    </header>
+    <RouterLink :to="{ name: 'Home' }"
+      class="justify-content-center d-flex align-items-center text-light text-decoration-none">
+      <div class="text-center p-4 text-white">
+        <h1>All-Spice</h1>
+        <h4>Cherish Your Family</h4>
+        <h4>And Theri Cooking</h4>
+      </div>
+    </RouterLink>
     <div
       class="container-fluid text-center bg-white border border-black rounded w-50 inImageBox align-content-center shadow">
       <div class="row">
@@ -46,7 +52,7 @@ async function getRecipes() {
   <!-- Recipe Cards -->
   <section class="container-fluid">
     <div class="row">
-      <div class="col-md-4 pb-4 d-flex justify-content-center" v-for="recipe in recipes" :key="recipe.id">
+      <div class="col-md-4 pb-4 d-flex justify-content-around" v-for="recipe in recipes" :key="recipe.id">
         <RecipeCard :recipe="recipe" />
       </div>
     </div>
