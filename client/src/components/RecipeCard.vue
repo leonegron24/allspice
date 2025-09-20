@@ -1,5 +1,6 @@
 <script setup>
 import { Recipe } from '@/models/Recipe.js';
+import RecipeModal from './RecipeModal.vue';
 
 defineProps({
     recipe: { type: Recipe, required: true }
@@ -8,10 +9,16 @@ defineProps({
 
 
 <template>
-    <div :style="{ backgroundImage: `url(${recipe.img})` }" class="recipe-card p-4 card justify-content-between shadow">
-        <p class="blurry text-white w-25 rounded text-center">{{ recipe.category }}</p>
+    <div data-bs-toggle="modal" data-bs-target="#recipeModal" :style="{ backgroundImage: `url(${recipe.img})` }"
+        class="btn recipe-card p-4 card justify-content-between shadow">
+        <RecipeModal :recipe="recipe" />
+        <p class="blurry fs-4 p-1 shadow border border-white text-white w-25 rounded text-center">{{ recipe.category }}
+        </p>
         <div>
-            <div class="blurry row text-white title-height rounded">{{ recipe.title }}</div>
+            <div
+                class=" p-1 blurry border shadow border-white align-items-center fs-3 row text-white title-height rounded">
+                {{ recipe.title }}
+            </div>
         </div>
     </div>
 </template>

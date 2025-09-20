@@ -27,7 +27,7 @@ async function getRecipes() {
 
 <template>
   <!-- Header -->
-  <section class="bg-cooking m-4 rounded position-relative shadow">
+  <section class="bg-cooking m-4 rounded position-relative shadow align-items-center">
     <header>
       <Navbar />
     </header>
@@ -40,7 +40,7 @@ async function getRecipes() {
       </div>
     </RouterLink>
     <div
-      class="container-fluid text-center bg-white border border-black rounded w-50 inImageBox align-content-center shadow">
+      class="container-fluid text-center bg-white border border-black rounded w-25 inImageBox align-content-center shadow">
       <div class="row">
         <div class="text-success col-md-4">Home</div>
         <div class="text-success col-md-4">My Recipes</div>
