@@ -61,11 +61,14 @@ public class IngredientsRepository
     internal List<Ingredient> GetIngredientsForRecipe(Recipe recipe)
     {
         string sql = @"
-        Select ingredients.*, recipes.*
-        From ingredients
-        INNER JOIN recipes ON recipes.id = ingredients.recipe_id
-        WHERE
-        recipes.id = @Id;";
+         SELECT 
+         ingredients.*, 
+         recipes.id AS recipeId,
+         recipes.*
+        FROM ingredients
+         INNER JOIN recipes ON recipes.id = ingredients.recipe_id
+        WHERE recipes.id = @Id;";
+
 
         List<Ingredient> ingredients = _db.Query(sql, (Ingredient ingredient, Recipe recipe) =>
         {

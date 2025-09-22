@@ -14,3 +14,4 @@ export class Recipe {
         this.updatedAt = new Date(data.updatedat)
     }
 }
+

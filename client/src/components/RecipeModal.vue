@@ -1,25 +1,31 @@
 <script setup>
 import { AppState } from '@/AppState.js';
 import { Recipe } from '@/models/Recipe.js';
-import { computed } from 'vue';
+import { ingredientsService } from '@/services/IngredientsService.js';
+import { Pop } from '@/utils/Pop.js';
+import { computed, onMounted } from 'vue';
 
-defineProps({
+const props = defineProps({
     recipe: { type: Recipe, required: true }
 })
 
 const account = computed(() => AppState.account)
+
+
+const ingredients = computed(() => AppState.ingredientsForRecipe)
+
 </script>
 
 
 <template>
-    <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" :id="`recipeModal-${recipe.id}`" tabindex="-1" aria-labelledby="myModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content container-fluid">
                 <div class="row">
                     <!-- IMAGE -->
-                    <div class="col-md-6 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }">
-                        A
-                    </div>
+                    <div class="col-md-6 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }"></div>
+                    <!-- RECIPE INFO -->
                     <div class="col-md-6 text-start p-4">
                         <!-- TITLE -->
                         <div class="d-flex justify-content-between">
@@ -33,7 +39,9 @@ const account = computed(() => AppState.account)
                             <p class="bg-grey text-white rounded p-1 w-25 text-center">{{ recipe.category }}</p>
                         </div>
                         <!-- INGREDIENTS -->
-
+                        <div v-for="ingredient in ingredients" :key="ingredient.id">
+                            {{ ingredient.quantity }} {{ ingredient.quantity }}
+                        </div>
                         <!-- INSTRUCTIONS -->
                         <div class="modal-body">
                             <h2 class="border-bottom">Instructions</h2>
