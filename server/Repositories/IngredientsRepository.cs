@@ -21,18 +21,13 @@ public class IngredientsRepository
         ingredients (name, quantity, recipe_id)
         values (@Name, @Quantity, @RecipeId);
 
-        SELECT ingredients.*, recipes.*
+        SELECT *
         FROM ingredients
-        INNER JOIN recipes ON recipes.id = ingredients.recipe_id
         WHERE
         ingredients.id = LAST_INSERT_ID();
         ";
 
-        Ingredient newIngredient = _db.Query(sql, (Ingredient ingredient, Recipe recipe) =>
-        {
-            ingredient.Recipe = recipe;
-            return ingredient;
-        }, ingredientData).SingleOrDefault();
+        Ingredient newIngredient = _db.Query<Ingredient>(sql, ingredientData).SingleOrDefault();
 
         return newIngredient;
     }
@@ -58,23 +53,15 @@ public class IngredientsRepository
         return ingredient;
     }
 
-    internal List<Ingredient> GetIngredientsForRecipe(Recipe recipe)
+    internal List<Ingredient> GetIngredientsForRecipe(int recipeId)
     {
         string sql = @"
-         SELECT 
-         ingredients.*, 
-         recipes.id AS recipeId,
-         recipes.*
-        FROM ingredients
-         INNER JOIN recipes ON recipes.id = ingredients.recipe_id
-        WHERE recipes.id = @Id;";
+        Select *
+        From ingredients
+        WHERE
+        ingredients.recipe_id = @RecipeId;";
 
-
-        List<Ingredient> ingredients = _db.Query(sql, (Ingredient ingredient, Recipe recipe) =>
-        {
-            ingredient.Recipe = recipe;
-            return ingredient;
-        }, recipe).ToList();
+        List<Ingredient> ingredients = _db.Query<Ingredient>(sql, new { RecipeId = recipeId }).ToList();
 
         return ingredients;
     }

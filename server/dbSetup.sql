@@ -150,3 +150,11 @@ WHERE
     recipes.id = 169
 
 SELECT * FROM favorites WHERE recipe_id = 168
+
+Select * From ingredients WHERE ingredients.recipe_id = 23
+
+SELECT *
+FROM recipes
+    LEFT JOIN ingredients ON ingredients.recipe_id = recipes.id
+WHERE
+    recipes.id = 19

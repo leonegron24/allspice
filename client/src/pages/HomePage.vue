@@ -2,6 +2,7 @@
 import { AppState } from '@/AppState.js';
 import Navbar from '@/components/Navbar.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
+import RecipeModal from '@/components/RecipeModal.vue';
 import { recipesService } from '@/services/RecipesService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
@@ -55,6 +56,7 @@ async function getRecipes() {
       <div class="col-md-4 pb-4 d-flex justify-content-around" v-for="recipe in recipes" :key="recipe.id">
         <RecipeCard :recipe="recipe" />
       </div>
+      <RecipeModal />
     </div>
   </section>
 

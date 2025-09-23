@@ -5,6 +5,12 @@ import { Recipe } from "@/models/Recipe.js"
 
 class RecipesService {
 
+    async getActiveRecipe(recipeId) {
+        const response = await api.get(`api/recipes/${recipeId}`)
+        console.log('Active Recipe: ', response.data)
+        AppState.activeRecipe = new Recipe(response.data)
+    }
+
     async getRecipes() {
         const response = await api.get('api/recipes')
         logger.log('Got recipes 🥘', response.data)

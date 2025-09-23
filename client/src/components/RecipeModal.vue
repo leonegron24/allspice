@@ -2,45 +2,83 @@
 import { AppState } from '@/AppState.js';
 import { Recipe } from '@/models/Recipe.js';
 import { ingredientsService } from '@/services/IngredientsService.js';
+import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-const props = defineProps({
-    recipe: { type: Recipe, required: true }
-})
+// const props = defineProps({
+//     recipe: { type: Recipe, required: true }
+// })
 
 const account = computed(() => AppState.account)
-
+const recipe = computed(() => AppState.activeRecipe)
 
 const ingredients = computed(() => AppState.ingredientsForRecipe)
+
+let toggleEditMenu = ref(false);
+function editOptions() {
+    console.log("toggleEditMenu Value: ", toggleEditMenu)
+    toggleEditMenu.value = !toggleEditMenu.value
+}
+
+async function editRecipe() {
+    try {
+        console.log('Editing recipe')
+
+    }
+    catch (error) {
+        Pop.error(error);
+        logger.error(error)
+    }
+}
+
+async function deleteRecipe() {
+    try {
+        console.log("Deleting Recipe...")
+    }
+    catch (error) {
+        Pop.error(error);
+        logger.error(error)
+    }
+}
 
 </script>
 
 
 <template>
-    <div class="modal fade" :id="`recipeModal-${recipe.id}`" tabindex="-1" aria-labelledby="myModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="recipeModal" tabindex="-1"
+        aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            <div class="modal-content container-fluid">
+            <div class="modal-content container-fluid" v-if="recipe">
                 <div class="row">
                     <!-- IMAGE -->
                     <div class="col-md-6 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }"></div>
+
                     <!-- RECIPE INFO -->
                     <div class="col-md-6 text-start p-4">
                         <!-- TITLE -->
                         <div class="d-flex justify-content-between">
-                            <h5 class="modal-title" id="myModalLabel">{{ recipe.title }}</h5>
+                            <div class="d-flex">
+                                <h5 class="modal-title" id="myModalLabel">{{ recipe.title }}</h5>
+                                <i v-if="account.id === recipe.creatorId" @click="editOptions()"
+                                    class="mdi mdi-menu fs-4 mx-2 btn"></i>
+                                <div v-if="toggleEditMenu">
+                                    <button @click="editRecipe()" class="btn pill btn-primary mb-1">Edit Recipe</button>
+                                    <button @click="deleteRecipe()" class="btn pill btn-danger">Delete Recipe</button>
+                                </div>
+                            </div>
+
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <!-- CREATOR -->
                         <div class="d-flex flex-column justify-content-start">
+                            <!-- CREATOR -->
                             <p class="text-grey">by: {{ recipe.creator.name }}</p>
                             <!-- CATEGORY -->
                             <p class="bg-grey text-white rounded p-1 w-25 text-center">{{ recipe.category }}</p>
                         </div>
                         <!-- INGREDIENTS -->
                         <div v-for="ingredient in ingredients" :key="ingredient.id">
-                            {{ ingredient.quantity }} {{ ingredient.quantity }}
+                            {{ ingredient.quantity }} {{ ingredient.name }}
                         </div>
                         <!-- INSTRUCTIONS -->
                         <div class="modal-body">
@@ -49,10 +87,6 @@ const ingredients = computed(() => AppState.ingredientsForRecipe)
                         </div>
                     </div>
 
-                </div>
-                <div v-if="account?.id === recipe.creator.id" class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
 
 

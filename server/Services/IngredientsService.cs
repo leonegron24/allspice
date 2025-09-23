@@ -48,7 +48,7 @@ public class IngredientsService
     internal List<Ingredient> GetIngredientsForRecipe(int recipeId)
     {
         Recipe recipe = _recipesService.GetRecipeById(recipeId);
-        List<Ingredient> ingredients = _ingredientsRepository.GetIngredientsForRecipe(recipe);
+        List<Ingredient> ingredients = _ingredientsRepository.GetIngredientsForRecipe(recipeId);
         return ingredients;
     }
 }

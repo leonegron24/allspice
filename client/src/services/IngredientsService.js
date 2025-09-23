@@ -5,13 +5,9 @@ import { Ingredient } from "@/models/Ingredient.js";
 class IngredientsService {
 
     async getIngredients(recipeId) {
-        console.log("recipe Id: ", recipeId)
         const response = await api.get(`api/recipes/${recipeId}/ingredients`)
-        console.log('ingredients data!', response.data)
         AppState.ingredientsForRecipe = response.data.map(pojo => new Ingredient(pojo))
+        console.log("Ingredients for Recipe: ", AppState.ingredientsForRecipe)
     }
-
-
-
 }
 export const ingredientsService = new IngredientsService();
