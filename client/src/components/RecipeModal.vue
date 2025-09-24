@@ -2,6 +2,7 @@
 import { AppState } from '@/AppState.js';
 import { Recipe } from '@/models/Recipe.js';
 import { ingredientsService } from '@/services/IngredientsService.js';
+import { recipesService } from '@/services/RecipesService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
 import { computed, onMounted, ref } from 'vue';
@@ -14,22 +15,23 @@ const account = computed(() => AppState.account)
 const recipe = computed(() => AppState.activeRecipe)
 
 const ingredients = computed(() => AppState.ingredientsForRecipe)
+let beingEdited = ref(true)
 
 let toggleEditMenu = ref(false);
+
 function editOptions() {
     console.log("toggleEditMenu Value: ", toggleEditMenu)
     toggleEditMenu.value = !toggleEditMenu.value
 }
 
-async function editRecipe() {
-    try {
-        console.log('Editing recipe')
-
+function toggleEditRecipe() {
+    console.log('Editing recipe')
+    if (beingEdited.value === true) {
+        beingEdited.value = false
+    } else {
+        beingEdited.value = true
     }
-    catch (error) {
-        Pop.error(error);
-        logger.error(error)
-    }
+    console.log("Editing? : ", beingEdited.value)
 }
 
 async function deleteRecipe() {
@@ -58,13 +60,20 @@ async function deleteRecipe() {
                     <div class="col-md-6 text-start p-4">
                         <!-- TITLE -->
                         <div class="d-flex justify-content-between">
-                            <div class="d-flex">
+                            <div class="d-flex align-items-center">
                                 <h5 class="modal-title" id="myModalLabel">{{ recipe.title }}</h5>
                                 <i v-if="account.id === recipe.creatorId" @click="editOptions()"
                                     class="mdi mdi-menu fs-4 mx-2 btn"></i>
                                 <div v-if="toggleEditMenu">
-                                    <button @click="editRecipe()" class="btn pill btn-primary mb-1">Edit Recipe</button>
-                                    <button @click="deleteRecipe()" class="btn pill btn-danger">Delete Recipe</button>
+                                    <button v-if="!beingEdited" @click="toggleEditRecipe()"
+                                        class="btn btn-sm pill btn-grey mb-1">Edit
+                                        Recipe</button>
+                                    <button v-if="beingEdited" @click="toggleEditRecipe()"
+                                        class="btn btn-sm pill btn-grey mb-1">Cancel
+                                        Edit</button>
+                                    <button @click="deleteRecipe()"
+                                        class="btn text-danger btn-sm pill btn-grey btn-danger">Delete
+                                        Recipe</button>
                                 </div>
                             </div>
 
@@ -76,14 +85,25 @@ async function deleteRecipe() {
                             <!-- CATEGORY -->
                             <p class="bg-grey text-white rounded p-1 w-25 text-center">{{ recipe.category }}</p>
                         </div>
-                        <!-- INGREDIENTS -->
-                        <div v-for="ingredient in ingredients" :key="ingredient.id">
-                            {{ ingredient.quantity }} {{ ingredient.name }}
+                        <!-- EDITABLE CONTENT BELOW -->
+                        <div v-if="!beingEdited">
+                            <!-- INGREDIENTS -->
+                            <div v-for="ingredient in ingredients" :key="ingredient.id">
+                                {{ ingredient.quantity }} {{ ingredient.name }}
+                            </div>
+                            <!-- INSTRUCTIONS -->
+                            <div class="modal-body">
+                                <h2 class="border-bottom">Instructions</h2>
+                                {{ recipe.instructions }}
+                            </div>
                         </div>
-                        <!-- INSTRUCTIONS -->
-                        <div class="modal-body">
-                            <h2 class="border-bottom">Instructions</h2>
-                            {{ recipe.instructions }}
+                        <div v-if="beingEdited">
+                            <div v-for="ingredient in ingredients" :key="ingredient.id">
+                                <i class="mdi mdi-cancel"></i>{{ ingredient.quantity }} {{ ingredient.name }}
+                            </div>
+                            <form action="">
+
+                            </form>
                         </div>
                     </div>
 
