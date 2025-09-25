@@ -26,7 +26,7 @@ public class IngredientsService
     internal void DeleteIngredient(int ingredientId, Account userInfo)
     {
         Ingredient ingredient = GetIngredientById(ingredientId);
-        Recipe recipe = _recipesService.GetRecipeById(ingredientId);
+        Recipe recipe = _recipesService.GetRecipeById(ingredient.RecipeId);
         if (recipe.CreatorId != userInfo.Id)
         {
             throw new Exception($"You can not delete ingredients from another users recipe, {userInfo.Name}");
