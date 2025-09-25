@@ -1,10 +1,14 @@
 <script setup>
 import { AppState } from '@/AppState.js';
 import { Recipe } from '@/models/Recipe.js';
+import { ingredientsService } from '@/services/IngredientsService.js';
+import { recipesService } from '@/services/RecipesService.js';
+import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
 import { computed, ref } from 'vue';
 
 const recipe = computed(() => AppState.activeRecipe)
+const ingredients = computed(() => AppState.ingredientsForRecipe)
 
 let newIngredient = ref({
     name: '',
@@ -16,6 +20,8 @@ let editableInstructions = ref(recipe.value.instructions)
 async function addIngredient() {
     try {
         console.log("adding Ingredient")
+        const newIng = { name: newIngredient.value.name, quantity: newIngredient.value.quantity, recipeId: recipe.value.id }
+        await ingredientsService.addIngredient(newIng)
     }
     catch (error) {
         Pop.error(error);
@@ -24,10 +30,17 @@ async function addIngredient() {
 
 async function saveInstructions() {
     try {
-        console.log("Saving Instruction Edits...")
-    }
-    catch (error) {
-        Pop.error(error);
+        const confirm = await Pop.confirm("Save your changes?")
+        if (confirm) {
+            const updateData = { instructions: editableInstructions.value }
+
+            await recipesService.saveInstructions(recipe.value.id, updateData)
+            recipe.value.instructions = editableInstructions.value // update locally so modal shows it
+            Pop.success('Instructions saved!')
+        }
+    } catch (error) {
+        logger.error(error)
+        Pop.error(error.message || 'Failed to save instructions')
     }
 }
 

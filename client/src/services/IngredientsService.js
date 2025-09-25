@@ -4,6 +4,12 @@ import { Ingredient } from "@/models/Ingredient.js";
 import { Pop } from "@/utils/Pop.js";
 
 class IngredientsService {
+
+    async addIngredient(newIng) {
+        const response = await api.post('api/ingredients', newIng)
+        AppState.ingredientsForRecipe.push(new Ingredient(response.data))
+    }
+
     async removeIngredient(ingredientId) {
         const confirm = await Pop.confirm("Remove Ingredients?")
         if (confirm) {

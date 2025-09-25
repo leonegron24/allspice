@@ -6,6 +6,11 @@ import { Pop } from "@/utils/Pop.js"
 
 class RecipesService {
 
+    async saveInstructions(recipeId, updateData) {
+        const response = await api.put(`api/recipes/${recipeId}`, updateData)
+        return response.data
+    }
+
     async deleteRecipe(recipeId) {
         const confirm = await Pop.confirm("Are you sure you want to delete this recipe?")
         if (confirm) {
