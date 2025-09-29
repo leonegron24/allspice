@@ -22,7 +22,7 @@ public class FavoritesController : ControllerBase
             Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
             favoriteData.AccountId = userInfo.Id;
             FavoriteRecipe favorite = _favoritesService.CreateFavorite(favoriteData);
-            return favorite;
+            return Ok(favorite);
         }
         catch (Exception e)
         {

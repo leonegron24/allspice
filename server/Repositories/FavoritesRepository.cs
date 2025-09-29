@@ -18,7 +18,11 @@ public class FavoritesRepository
     INSERT INTO favorites (recipe_id, account_id)
     VALUES (@RecipeId, @AccountId);
 
-    SELECT favorites.id AS FavoriteId, recipes.*, accounts.*
+    SELECT 
+    favorites.id AS FavoriteId,
+    favorites.recipe_id AS RecipeId,
+    recipes.*, 
+    accounts.*
     FROM favorites
     JOIN recipes ON recipes.id = favorites.recipe_id
     JOIN accounts ON accounts.id = recipes.creator_id

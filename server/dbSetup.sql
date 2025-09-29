@@ -20,6 +20,8 @@ CREATE TABLE ingredients (
 
 DROP TABLE IF EXISTS favorites;
 
+DELETE FROM favorites;
+
 INSERT INTO
     favorites (recipe_id, account_id)
 values (@RecipeId, @AccountId);

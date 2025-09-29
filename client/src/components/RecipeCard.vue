@@ -16,7 +16,7 @@ defineProps({
 const account = computed(() => AppState.account)
 
 const isFavorited = (recipeId) => {
-    return AppState.accountFavorites.some(fav => fav.recipeId === recipeId)
+    return AppState.accountFavorites.some(rec => rec.id === recipeId)
 }
 
 
@@ -40,6 +40,17 @@ async function toggleFavoriteRecipe(recipeId) {
     catch (error) {
         Pop.error(error);
         logger.error(error)
+    }
+}
+
+async function getFavorites() {
+    try {
+        console.log("Fetching favorites!")
+        await favoriteService.getFavorites()
+    }
+    catch (error) {
+        Pop.error(error);
+        logger.log(error)
     }
 }
 
