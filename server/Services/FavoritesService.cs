@@ -17,8 +17,7 @@ public class FavoritesService
     internal FavoriteRecipe CreateFavorite(Favorite favoriteData)
     {
         Recipe favoritedRecipe = _recipesService.GetRecipeById(favoriteData.RecipeId);
-        int recipeId = favoritedRecipe.Id;
-        FavoriteRecipe favorite = _favoritesRepository.CreateFavorite(recipeId, favoriteData);
+        FavoriteRecipe favorite = _favoritesRepository.CreateFavorite(favoriteData);
         return favorite;
     }
 

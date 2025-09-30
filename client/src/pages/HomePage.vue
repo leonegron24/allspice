@@ -13,7 +13,6 @@ const recipes = computed(() => AppState.recipes)
 
 onMounted(() => {
   getRecipes()
-  getFavorites()
 })
 
 async function getRecipes() {
@@ -23,17 +22,6 @@ async function getRecipes() {
   catch (error) {
     Pop.error(error);
     logger.error("[Could not fetch Recipe!]", error.message)
-  }
-}
-
-async function getFavorites() {
-  try {
-    console.log("Fetching favorites!")
-    await favoriteService.getFavorites()
-  }
-  catch (error) {
-    Pop.error(error);
-    logger.log(error)
   }
 }
 

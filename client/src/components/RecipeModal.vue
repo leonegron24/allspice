@@ -83,7 +83,7 @@ async function removeIngredient(ingredientId) {
                         <div class="d-flex align-items-center justify-content-between p-4">
                             <div class="d-flex align-items-center">
                                 <h5 class="modal-title" id="myModalLabel">{{ recipe.title }}</h5>
-                                <i v-if="account.id === recipe.creatorId" @click="editOptions()"
+                                <i v-if="account?.id === recipe.creatorId" @click="editOptions()"
                                     class="mdi mdi-menu fs-4 mx-2 btn"></i>
                                 <div v-if="toggleEditMenu">
                                     <button v-if="!beingEdited" @click="toggleEditRecipe()"

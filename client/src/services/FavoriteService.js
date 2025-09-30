@@ -1,13 +1,21 @@
 import { AppState } from "@/AppState.js"
 import { api } from "./AxiosService.js"
 import { FavoriteRecipe } from "@/models/FavoriteRecipe.js"
+import { Pop } from "@/utils/Pop.js"
+import { logger } from "@/utils/Logger.js"
 
 class FavoriteService {
 
     async getFavorites() {
-        console.log("Service getting favorites")
-        const response = await api.get('account/favorites')
-        AppState.accountFavorites = response.data.map(r => new FavoriteRecipe(r))
+        try {
+            console.log("Service getting favorites")
+            const response = await api.get('account/favorites')
+            AppState.accountFavorites = response.data.map(r => new FavoriteRecipe(r))
+        }
+        catch (error) {
+            Pop.error(error);
+            logger.error(error)
+        }
     }
 
     async toggleFavoriteRecipe(recipeId) {
