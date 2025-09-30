@@ -3,6 +3,7 @@ import { AppState } from '@/AppState.js';
 import Navbar from '@/components/Navbar.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
 import RecipeModal from '@/components/RecipeModal.vue';
+import { favoriteService } from '@/services/FavoriteService.js';
 import { recipesService } from '@/services/RecipesService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
@@ -12,6 +13,7 @@ const recipes = computed(() => AppState.recipes)
 
 onMounted(() => {
   getRecipes()
+  getFavorites()
 })
 
 async function getRecipes() {
@@ -21,6 +23,17 @@ async function getRecipes() {
   catch (error) {
     Pop.error(error);
     logger.error("[Could not fetch Recipe!]", error.message)
+  }
+}
+
+async function getFavorites() {
+  try {
+    console.log("Fetching favorites!")
+    await favoriteService.getFavorites()
+  }
+  catch (error) {
+    Pop.error(error);
+    logger.log(error)
   }
 }
 

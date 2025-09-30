@@ -6,17 +6,18 @@ import { ingredientsService } from '@/services/IngredientsService.js';
 import { logger } from '@/utils/Logger.js';
 import { recipesService } from '@/services/RecipesService.js';
 import { AppState } from '@/AppState.js';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { favoriteService } from '@/services/FavoriteService.js';
 
 defineProps({
     recipe: { type: Recipe, required: true }
 })
 
+
 const account = computed(() => AppState.account)
 
 const isFavorited = (recipeId) => {
-    return AppState.accountFavorites.some(rec => rec.id === recipeId)
+    return AppState.accountFavorites.some(fav => fav.id == recipeId)
 }
 
 
@@ -43,17 +44,6 @@ async function toggleFavoriteRecipe(recipeId) {
     }
 }
 
-async function getFavorites() {
-    try {
-        console.log("Fetching favorites!")
-        await favoriteService.getFavorites()
-    }
-    catch (error) {
-        Pop.error(error);
-        logger.log(error)
-    }
-}
-
 </script>
 
 
@@ -64,7 +54,8 @@ async function getFavorites() {
             <p class="blurry fs-md-4 p-md-1 shadow border border-white text-white w-25 rounded text-center">
                 {{ recipe.category }}
             </p>
-            <i @click="toggleFavoriteRecipe(recipe.id)" class="text-danger p-0 bg-primary btn btn-pill fs-1 mdi"
+            <i v-if="account" @click="toggleFavoriteRecipe(recipe.id)"
+                class="text-danger p-0 bg-primary btn btn-pill fs-1 mdi"
                 :class="isFavorited(recipe.id) ? 'mdi-heart' : 'mdi-heart-outline'">
             </i>
 
