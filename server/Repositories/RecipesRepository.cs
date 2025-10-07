@@ -72,11 +72,16 @@ public class RecipesRepository
     internal Recipe GetRecipeById(int recipeId)
     {
         string sql = @"
-        SELECT recipes.*, accounts.*
+        SELECT recipes.*,
+        COUNT(favorites.id) AS favoriteCount,
+        accounts.*
         FROM recipes
         INNER JOIN accounts ON accounts.id = recipes.creator_id
+        LEFT JOIN favorites ON favorites.recipe_id = recipes.id
         WHERE
-        recipes.id = @RecipeId;
+        recipes.id = @RecipeId
+        GROUP BY 
+        recipes.id;
         ";
 
         Recipe queriedRecipe = _db.Query(sql, (Recipe recipe, Account account) =>

@@ -29,10 +29,19 @@ class RecipesService {
         AppState.activeRecipe = new Recipe(response.data)
     }
 
-    async getRecipes() {
+    async getRecipes(filterValue, account) {
         const response = await api.get('api/recipes')
-        logger.log('Got recipes 🥘', response.data)
-        AppState.recipes = response.data.map(recipes => new Recipe(recipes))
+        const allRecipes = response.data.map(recipes => new Recipe(recipes))
+        if (filterValue === 'Home') {
+            AppState.recipes = allRecipes
+            logger.log('Fetching all recipes: ', AppState.recipes)
+        } else if (filterValue === 'myRecipes') {
+            logger.log('Fetching my recipes')
+            AppState.recipes = allRecipes.filter(r => r.creator == account)
+        } else if (filterValue === 'myFavorites') {
+            console.log('Fetching my favorites')
+            AppState.recipes = AppState.accountFavorites
+        }
     }
 
 }

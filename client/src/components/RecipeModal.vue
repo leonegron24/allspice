@@ -9,15 +9,13 @@ import { Modal } from 'bootstrap';
 import { computed, onMounted, ref } from 'vue';
 import EditRecipModal from './EditRecipModal.vue';
 
-// const props = defineProps({
-//     recipe: { type: Recipe, required: true }
-// })
 
 const account = computed(() => AppState.account)
 const recipe = computed(() => AppState.activeRecipe)
 
+
 const ingredients = computed(() => AppState.ingredientsForRecipe)
-let beingEdited = ref(true)
+let beingEdited = ref(false)
 
 let toggleEditMenu = ref(false);
 
@@ -75,7 +73,10 @@ async function removeIngredient(ingredientId) {
             <div class="modal-content container-fluid" v-if="recipe">
                 <div class="row">
                     <!-- IMAGE -->
-                    <div class="col-md-6 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }"></div>
+                    <div class="col-md-6 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }">
+                        <span><i class="fs-1 bg-grey rounded mdi mdi-heart text-danger">{{ recipe.favoriteCount
+                        }}</i></span>
+                    </div>
 
                     <!-- RECIPE INFO -->
                     <div class="col-md-6 text-start">

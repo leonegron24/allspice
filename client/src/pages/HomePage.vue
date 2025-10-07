@@ -7,23 +7,31 @@ import { favoriteService } from '@/services/FavoriteService.js';
 import { recipesService } from '@/services/RecipesService.js';
 import { logger } from '@/utils/Logger.js';
 import { Pop } from '@/utils/Pop.js';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
+const account = computed(() => AppState.account)
 const recipes = computed(() => AppState.recipes)
+let filter = ref('')
+
+function setFilter(filterKey) {
+  filter.value = filterKey
+  getRecipes(filterKey)
+}
 
 onMounted(() => {
   getRecipes()
 })
 
-async function getRecipes() {
+async function getRecipes(filterKey) {
   try {
-    await recipesService.getRecipes()
+    await recipesService.getRecipes(filterKey, account)
   }
   catch (error) {
     Pop.error(error);
     logger.error("[Could not fetch Recipe!]", error.message)
   }
 }
+
 
 </script>
 
@@ -44,9 +52,9 @@ async function getRecipes() {
     <div
       class="container-fluid text-center bg-white border border-black rounded w-25 inImageBox align-content-center shadow">
       <div class="row">
-        <div class="text-success col-md-4">Home</div>
-        <div class="text-success col-md-4">My Recipes</div>
-        <div class="text-success col-md-4">Favorites</div>
+        <div class="text-success col-md-4 btn p-0" @click="setFilter('Home')">Home</div>
+        <div class="text-success col-md-4 btn p-0" @click="setFilter('myRecipes')">My Recipes</div>
+        <div class="text-success col-md-4 btn p-0" @click="setFilter('myFavorites')">Favorites</div>
       </div>
     </div>
   </section>

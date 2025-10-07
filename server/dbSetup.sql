@@ -18,24 +18,54 @@ CREATE TABLE ingredients (
     FOREIGN KEY (recipe_id) REFERENCES recipes (id) ON DELETE CASCADE
 )
 
-DROP TABLE IF EXISTS favorites;
+-- Recipe
+CREATE TABLE recipes (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    title VARCHAR(255) NOT NULL,
+    instructions VARCHAR(5000),
+    img VARCHAR(1000) NOT NULL,
+    category ENUM(
+        'breakfast',
+        'lunch',
+        'dinner',
+        'snack',
+        'dessert'
+    ) NOT NULL,
+    creator_id VARCHAR(255) NOT NULL,
+    Foreign Key (creator_id) REFERENCES accounts (id) ON DELETE CASCADE
+)
 
-DELETE FROM favorites;
+-- Favorite
+CREATE TABLE favorites (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    recipe_id INT NOT NULL,
+    account_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE,
+    FOREIGN KEY (recipe_id) REFERENCES recipes (id) ON DELETE CASCADE
+)
 
-INSERT INTO
-    favorites (recipe_id, account_id)
-values (@RecipeId, @AccountId);
+SELECT * FROM favorites LIMIT 5;
 
-SELECT favorites.*, recipes.*
-FROM
-    favorites
-    INNER JOIN recipes ON recipes.id = favorites.recipe_id
-    INNER JOIN acounts ON favorites.acount_id = accounts.id
-WHERE
-    favorites.id = LAST_INSERT_ID();
+SELECT id FROM recipes LIMIT 5;
+
+DROP TABLE IF EXISTS recipes;
 
 -- SELECT INGREDIENTS
 SELECT * FROM favorites
+
+SELECT recipes.*, COUNT(favorites.id) AS favoriteCount, accounts.*
+FROM
+    recipes
+    INNER JOIN accounts ON accounts.id = recipes.creator_id
+    LEFT JOIN favorites ON favorites.recipe_id = recipes.id
+WHERE
+    recipes.id = @RecipeId
+GROUP BY
+    recipes.id;
 
 SELECT ingredients.*, recipes.*
 FROM ingredients
@@ -58,24 +88,9 @@ WHERE
 -- Get Ingredient By Id
 Select * FROM ingredients WHERE ingredients.id = 2;
 
--- Recipe
-CREATE TABLE recipes (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    title VARCHAR(255) NOT NULL,
-    instructions VARCHAR(5000),
-    img VARCHAR(1000) NOT NULL,
-    category ENUM(
-        'breakfast',
-        'lunch',
-        'dinner',
-        'snack',
-        'dessert'
-    ) NOT NULL,
-    creator_id VARCHAR(255) NOT NULL,
-    Foreign Key (creator_id) REFERENCES accounts (id) ON DELETE CASCADE
-)
+SHOW TABLES;
+
+SELECT * FROM recipes LIMIT 3;
 
 -- CREATE RECIPE
 INSERT INTO
@@ -108,16 +123,6 @@ UPDATE recipes SET recipe = WHERE recipes.id = 5
 
 -- DELETE RECIPE
 DELETE FROM recipes WHERE id = 5 LIMIT 1;
-
--- Favorite
-CREATE TABLE favorites (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    recipe_id INT NOT NULL,
-    account_id VARCHAR(255) NOT NULL,
-    FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
-)
 
 -- Get Account Favorite Recipes
 SELECT favorites.*, recipes.*
@@ -160,3 +165,17 @@ FROM recipes
     LEFT JOIN ingredients ON ingredients.recipe_id = recipes.id
 WHERE
     recipes.id = 19
+
+-- delete orphan favorites
+DELETE f
+FROM favorites f
+    LEFT JOIN recipes r ON f.recipe_id = r.id
+WHERE
+    r.id IS NULL;
+
+-- delete orphan ingredients
+DELETE i
+FROM ingredients i
+    LEFT JOIN recipes r ON i.recipe_id = r.id
+WHERE
+    r.id IS NULL;

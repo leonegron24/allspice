@@ -55,7 +55,7 @@ async function toggleFavoriteRecipe(recipeId) {
                 {{ recipe.category }}
             </p>
             <i v-if="account" @click="toggleFavoriteRecipe(recipe.id)"
-                class="text-danger p-0 bg-primary btn btn-pill fs-1 mdi"
+                class="text-danger p-0 bg-grey btn btn-pill fs-1 mdi"
                 :class="isFavorited(recipe.id) ? 'mdi-heart' : 'mdi-heart-outline'">
             </i>
 
