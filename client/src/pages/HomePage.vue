@@ -1,5 +1,6 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import CreateRecipeModal from '@/components/CreateRecipeModal.vue';
 import Navbar from '@/components/Navbar.vue';
 import RecipeCard from '@/components/RecipeCard.vue';
 import RecipeModal from '@/components/RecipeModal.vue';
@@ -11,7 +12,7 @@ import { computed, onMounted, ref } from 'vue';
 
 const account = computed(() => AppState.account)
 const recipes = computed(() => AppState.recipes)
-let filter = ref('')
+let filter = ref('Home')
 
 function setFilter(filterKey) {
   filter.value = filterKey
@@ -19,18 +20,19 @@ function setFilter(filterKey) {
 }
 
 onMounted(() => {
-  getRecipes()
+  getRecipes(filter.value)
 })
 
 async function getRecipes(filterKey) {
   try {
-    await recipesService.getRecipes(filterKey, account)
+    await recipesService.getRecipes(filterKey, account.value)
   }
   catch (error) {
     Pop.error(error);
     logger.error("[Could not fetch Recipe!]", error.message)
   }
 }
+
 
 
 </script>
@@ -65,9 +67,17 @@ async function getRecipes(filterKey) {
       <div class="col-md-4 pb-4 d-flex justify-content-around" v-for="recipe in recipes" :key="recipe.id">
         <RecipeCard :recipe="recipe" />
       </div>
-      <RecipeModal />
     </div>
+    <RecipeModal />
   </section>
+
+  <div v-if="account" class="text-end sticky-bottom p-4">
+    <button data-bs-toggle="modal" data-bs-target="#createRecipeModal" class="btn btn-success fs-1 rounded-pill"> <i
+        class="mdi mdi-plus"></i>
+    </button>
+  </div>
+  <CreateRecipeModal />
+
 
 </template>
 

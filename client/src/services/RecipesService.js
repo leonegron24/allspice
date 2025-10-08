@@ -6,6 +6,12 @@ import { Pop } from "@/utils/Pop.js"
 
 class RecipesService {
 
+    async createRecipe(newRec) {
+        const response = await api.post('api/recipes', newRec)
+        console.log("new Recipe: ", response.data)
+        AppState.recipes.push(new Recipe(response.data))
+    }
+
     async saveInstructions(recipeId, updateData) {
         const response = await api.put(`api/recipes/${recipeId}`, updateData)
         return response.data
@@ -37,7 +43,7 @@ class RecipesService {
             logger.log('Fetching all recipes: ', AppState.recipes)
         } else if (filterValue === 'myRecipes') {
             logger.log('Fetching my recipes')
-            AppState.recipes = allRecipes.filter(r => r.creator == account)
+            AppState.recipes = allRecipes.filter(r => r.creatorId === account.id)
         } else if (filterValue === 'myFavorites') {
             console.log('Fetching my favorites')
             AppState.recipes = AppState.accountFavorites
