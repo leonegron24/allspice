@@ -48,7 +48,7 @@ async function createRecipe() {
                     <div class="text-start row">
                         <div class="col-md-6">
                             <label for="title" class="form-label">Title</label>
-                            <input v-model="newRecipe.title" type="text" id="title" class="form-control"
+                            <input maxlength="30" v-model="newRecipe.title" type="text" id="title" class="form-control"
                                 placeholder="Title..." />
                         </div>
                         <div class="col-md-6">

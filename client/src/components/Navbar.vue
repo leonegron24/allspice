@@ -1,41 +1,36 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { loadState, saveState } from '../utils/Store.js';
 import Login from './Login.vue';
+import { Pop } from '@/utils/Pop.js';
+import { recipesService } from '@/services/RecipesService.js';
 
-const theme = ref(loadState('theme') || 'light')
 
-function toggleTheme() {
-  theme.value = theme.value == 'light' ? 'dark' : 'light'
+let query = ref('')
+
+async function queryRecipes() {
+  try {
+    const searchQuery = query.value
+    await recipesService.queryRecipes(searchQuery)
+    query.value = ''
+  }
+  catch (error) {
+    Pop.error(error);
+  }
 }
 
-watch(theme, () => {
-  document.documentElement.setAttribute('data-bs-theme', theme.value)
-  saveState('theme', theme.value)
-}, { immediate: true })
 
 </script>
 
 <template>
   <nav class="text-white text-bold border-vue">
     <div class="container-fluid">
-      <!-- collapse button -->
-      <!-- collapsing menu -->
-      <div class="d-flex justify-content-end align-items-center">
-
-        <form class="d-flex w-25" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+      <div class="row p-2 w-100 setupNav align-items-center">
+        <form @submit.prevent="queryRecipes" class="col-3 d-flex" role="search">
+          <input v-model="query" class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
         </form>
-        <!-- LOGIN COMPONENT HERE -->
-        <div>
-          <button class="btn text-light fs-2" @click="toggleTheme"
-            :title="`Enable ${theme == 'light' ? 'dark' : 'light'} theme.`">
-            <i v-if="theme == 'dark'" class="mdi mdi-weather-sunny"></i>
-            <i v-if="theme == 'light'" class="mdi mdi-weather-night"></i>
-          </button>
+        <div class="col-1">
+          <Login />
         </div>
-        <Login />
       </div>
     </div>
   </nav>
@@ -44,6 +39,10 @@ watch(theme, () => {
 <style lang="scss" scoped>
 a {
   text-decoration: none;
+}
+
+.setupNav {
+  justify-content: end
 }
 
 .nav-link {
@@ -64,5 +63,12 @@ a {
   &:focus {
     width: 100%;
   }
+}
+
+@media (max-width: 1100px) {
+  .setupNav {
+    justify-content: space-between;
+  }
+
 }
 </style>

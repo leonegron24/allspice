@@ -11,7 +11,7 @@ import { Pop } from '@/utils/Pop.js';
 import { computed, onMounted, ref } from 'vue';
 
 const account = computed(() => AppState.account)
-const recipes = computed(() => AppState.recipes)
+const recipes = computed(() => AppState.filteredRecipes)
 let filter = ref('Home')
 
 function setFilter(filterKey) {
@@ -52,11 +52,11 @@ async function getRecipes(filterKey) {
       </div>
     </RouterLink>
     <div
-      class="container-fluid text-center bg-white border border-black rounded w-25 inImageBox align-content-center shadow">
-      <div class="row">
-        <div class="text-success col-md-4 btn p-0" @click="setFilter('Home')">Home</div>
-        <div class="text-success col-md-4 btn p-0" @click="setFilter('myRecipes')">My Recipes</div>
-        <div class="text-success col-md-4 btn p-0" @click="setFilter('myFavorites')">Favorites</div>
+      class="container-fluid text-center bg-white border border-black rounded setWidth  inImageBox align-content-center shadow">
+      <div class="row justify-content-between">
+        <div class="text-success col-md-4 col-3 btn p-0" @click="setFilter('Home')">Home</div>
+        <div class="text-success col-md-4 col-4 btn p-0" @click="setFilter('myRecipes')">My Recipes</div>
+        <div class="text-success col-md-4 col-3 btn p-0" @click="setFilter('myFavorites')">Favorites</div>
       </div>
     </div>
   </section>
@@ -91,5 +91,16 @@ async function getRecipes(filterKey) {
   position: relative;
   top: 1vh;
   min-height: 4vh;
+}
+
+.setWidth {
+  max-width: 25%;
+}
+
+@media (max-width: 900px) {
+  .setWidth {
+    max-width: 75%;
+  }
+
 }
 </style>

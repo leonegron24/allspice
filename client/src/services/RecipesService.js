@@ -5,6 +5,16 @@ import { Recipe } from "@/models/Recipe.js"
 import { Pop } from "@/utils/Pop.js"
 
 class RecipesService {
+    async queryRecipes(searchQuery) {
+        console.log('searching for ', searchQuery)
+        const lowerQuery = searchQuery.toLowerCase()
+        AppState.filteredRecipes = AppState.recipes.filter(r => (r.category || '').toLowerCase().includes(lowerQuery) ||
+            (r.title || '').toLowerCase().includes(lowerQuery))
+        if (!searchQuery.trim()) {
+            AppState.filteredRecipes = AppState.recipes
+        }
+
+    }
 
     async createRecipe(newRec) {
         const response = await api.post('api/recipes', newRec)
@@ -38,15 +48,16 @@ class RecipesService {
     async getRecipes(filterValue, account) {
         const response = await api.get('api/recipes')
         const allRecipes = response.data.map(recipes => new Recipe(recipes))
+        AppState.recipes = allRecipes
         if (filterValue === 'Home') {
-            AppState.recipes = allRecipes
+            AppState.filteredRecipes = allRecipes
             logger.log('Fetching all recipes: ', AppState.recipes)
         } else if (filterValue === 'myRecipes') {
             logger.log('Fetching my recipes')
-            AppState.recipes = allRecipes.filter(r => r.creatorId === account.id)
+            AppState.filteredRecipes = allRecipes.filter(r => r.creatorId === account.id)
         } else if (filterValue === 'myFavorites') {
             console.log('Fetching my favorites')
-            AppState.recipes = AppState.accountFavorites
+            AppState.filteredRecipes = AppState.accountFavorites
         }
     }
 

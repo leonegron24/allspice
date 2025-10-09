@@ -2,6 +2,8 @@
 import { computed } from 'vue';
 import { AppState } from '../AppState.js';
 import { AuthService } from '../services/AuthService.js';
+import { ref, watch } from 'vue';
+import { loadState, saveState } from '../utils/Store.js';
 
 const identity = computed(() => AppState.identity)
 const account = computed(() => AppState.account)
@@ -12,6 +14,14 @@ function login() {
 function logout() {
   AuthService.logout()
 }
+function toggleTheme() {
+  theme.value = theme.value == 'light' ? 'dark' : 'light'
+}
+const theme = ref(loadState('theme') || 'light')
+watch(theme, () => {
+  document.documentElement.setAttribute('data-bs-theme', theme.value)
+  saveState('theme', theme.value)
+}, { immediate: true })
 
 </script>
 
@@ -39,6 +49,11 @@ function logout() {
               <i class="mdi mdi-logout"></i>
               logout
             </div>
+            <button class="bg-grey btn text-light fs-2" @click="toggleTheme"
+              :title="`Enable ${theme == 'light' ? 'dark' : 'light'} theme.`">
+              <i v-if="theme == 'dark'" class="mdi mdi-weather-sunny"></i>
+              <i v-if="theme == 'light'" class="mdi mdi-weather-night"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -48,10 +63,20 @@ function logout() {
 
 <style lang="scss" scoped>
 .user-img {
-  height: 80px;
-  width: 80px;
+  height: 7vh;
+  width: 7vh;
   border-radius: 100px;
   object-fit: cover;
   object-position: center;
+}
+
+@media (max-width: 750px) {
+  .user-img {
+    height: 4vh;
+    width: 4vh;
+    border-radius: 100px;
+    object-fit: cover;
+    object-position: center;
+  }
 }
 </style>
