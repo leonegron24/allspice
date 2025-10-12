@@ -49,22 +49,24 @@ async function toggleFavoriteRecipe(recipeId) {
 
 <template>
     <div :style="{ backgroundImage: `url(${recipe.img})` }"
-        class="recipe-card p-md-4 card justify-content-between shadow">
-        <div class="d-flex justify-content-between align-items-center">
-            <p class="blurry fs-md-4 p-md-1 shadow border border-white text-white w-25 rounded text-center">
-                {{ recipe.category }}
-            </p>
+        class="container recipe-card card justify-content-between shadow">
+        <div class="row d-flex justify-content-between align-items-center">
+            <div class="col-md-6 col-6">
+                <p class="w-100 blurry fs-md-4 p-md-1 shadow border border-white text-white w-25 rounded text-center">
+                    {{ recipe.category }}
+                </p>
+            </div>
             <i v-if="account" @click="toggleFavoriteRecipe(recipe.id)"
-                class="text-danger p-0 bg-grey btn btn-pill fs-1 mdi"
+                class="col-2 col-md-2 text-danger p-0 bg-grey btn btn-pill fs-1 mdi"
                 :class="isFavorited(recipe.id) ? 'mdi-heart' : 'mdi-heart-outline'">
             </i>
 
 
         </div>
-        <div>
+        <div class="row p-2 p-md-1 justify-content-center">
             <div data-bs-toggle="modal" data-bs-target="#recipeModal" @click="getActiveRecipe(recipe.id)"
-                class="btn p-md-1 blurry border shadow border-white align-items-center fs-md-3 row text-white title-height rounded">
-                {{ recipe.title }}
+                class="p-4 p-md-2 col-12 col-md-12 btn blurry border shadow border-white text-white rounded">
+                <p class="m-0 p-2 p-md-0">{{ recipe.title }}</p>
             </div>
         </div>
     </div>
@@ -77,10 +79,6 @@ async function toggleFavoriteRecipe(recipeId) {
     aspect-ratio: 1/1;
     background-size: cover;
     background-position: center;
-}
-
-.title-height {
-    min-height: 5dvh;
 }
 
 .blurry {

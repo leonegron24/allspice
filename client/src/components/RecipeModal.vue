@@ -73,40 +73,45 @@ async function removeIngredient(ingredientId) {
             <div class="modal-content container-fluid" v-if="recipe">
                 <div class="row">
                     <!-- IMAGE -->
-                    <div class="col-md-6 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }">
-                        <span><i class="fs-1 bg-grey rounded mdi mdi-heart text-danger">{{ recipe.favoriteCount
-                        }}</i></span>
+                    <div class="col-md-6 col-12 modalImg" :style="{ backgroundImage: `url(${recipe.img})` }">
+                        <span><i class="fs-1 bg-grey rounded mdi mdi-heart text-danger">{{
+                            recipe.favoriteCount }}</i></span>
                     </div>
 
                     <!-- RECIPE INFO -->
-                    <div class="col-md-6 text-start">
+                    <div class="p-2 col-md-6 text-start">
                         <!-- TITLE -->
-                        <div class="d-flex align-items-center justify-content-between p-4">
-                            <div class="d-flex align-items-center">
+                        <div class="row p-2">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="modal-title" id="myModalLabel">{{ recipe.title }}</h5>
-                                <i v-if="account?.id === recipe.creatorId" @click="editOptions()"
-                                    class="mdi mdi-menu fs-4 mx-2 btn"></i>
-                                <div v-if="toggleEditMenu">
-                                    <button v-if="!beingEdited" @click="toggleEditRecipe()"
-                                        class="btn btn-sm pill btn-grey m-2">Edit
-                                        Recipe</button>
-                                    <button v-if="beingEdited" @click="toggleEditRecipe()"
-                                        class="btn btn-sm pill btn-grey m-2">Cancel
-                                        Edit</button>
-                                    <button @click="deleteRecipe(recipe.id)"
-                                        class="btn text-danger btn-sm pill btn-grey btn-danger">Delete
-                                        Recipe</button>
+                                <i v-if="account.id === recipe.creatorId" @click="editOptions()"
+                                    class="mdi mdi-menu fs-5 btn"></i>
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex flex-column" v-if="toggleEditMenu">
+                                        <button v-if="!beingEdited" @click="toggleEditRecipe()"
+                                            class="btn mb-2  btn-sm pill btn-grey">Edit
+                                        </button>
+                                        <button v-if="beingEdited" @click="toggleEditRecipe()"
+                                            class="btn btn-sm mb-2 pill btn-grey">Cancel
+                                        </button>
+                                        <button @click="deleteRecipe(recipe.id)"
+                                            class="btn text-danger btn-sm pill btn-grey btn-danger">Delete
+                                        </button>
+                                    </div>
                                 </div>
+                                <button type="button" class="btn-close mx-2 p-0" data-bs-dismiss="modal"
+                                    aria-label="Close" @click="closeEditFriendly()"></button>
                             </div>
-
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                @click="closeEditFriendly()"></button>
                         </div>
-                        <div class="p-4">
+                        <div class="row p-2">
                             <!-- CREATOR -->
-                            <p class="text-grey">by: {{ recipe.creator.name }}</p>
+                            <div class="w-100 col-12 col-md-6">
+                                <p class="text-grey">by: {{ recipe.creator.name }}</p>
+                            </div>
                             <!-- CATEGORY -->
-                            <p class="bg-grey text-white rounded p-1 w-25 text-center">{{ recipe.category }}</p>
+                            <div class="w-100 col-12 col-md-8">
+                                <p class="bg-grey w-50 text-white rounded text-center">{{ recipe.category }}</p>
+                            </div>
                         </div>
                         <!-- EDITABLE CONTENT BELOW -->
                         <div class="mx-0 p-4" v-if="!beingEdited">
